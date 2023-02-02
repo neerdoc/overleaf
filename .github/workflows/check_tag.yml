@@ -39,3 +39,8 @@ jobs:
       - name: Read docker tag version of final image
         id: finaltag
         run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}
+
+      - name: Test if
+        id: testif
+        if: ${{ steps.basetag.outputs.version }} == "TAG_NOT_FOUND"
+        run: echo "Exact value between :${{ steps.basetag.outputs.version }}:"

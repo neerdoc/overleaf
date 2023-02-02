@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+################################################################################
+# Manifest for all metadata
+################################################################################
+
+# Define docker command and files
+docker_cmd='docker'
+docker_src='.'
+arch=$(uname -m)
+AUTH_TOKEN="Z2l0bGFiOkZESjkoI2ZqQUVPRkFmTyhuYzlSQzdST0ZIT0FDNDhOVQ=="
+revision=10
+
+# Define the dockerfile, image name and tag (in order!)
+declare -a BUILDS # Naming convention: <Dockerfile>#<Image>:<Tag>#build_args.
+BUILDS+=( "server-ce/Dockerfile-base#registry.k2007222.foi.se/gusjoh/latex-full:2021.${revision}" )
+BUILDS+=( "src/foi/Dockerfile.foi#registry.k2007222.foi.se/gusjoh/latex-foi:2021.1.${revision}#--build-arg revision=${revision}")
+BUILDS+=( "src/foi/Dockerfile.foi#registry.k2007222.foi.se/gusjoh/latex-foi:latest#--build-arg revision=${revision}" )
+BUILDS+=( "Dockerfile#registry.k2007222.foi.se/gusjoh/sharelatex:1.0.${revision}#--build-arg ver=3.0.1 --build-arg revision=${revision}" )
+
+# We still need to define what image to run! Which we will assume is the last
+# item we built!
+TMP=$(echo "${BUILDS[-1]}" | awk -F'#' '{print $2}')
+IMG=$(echo "${TMP}" | awk -F':' '{print $1}')
+TAG=$(echo "${TMP}" | awk -F':' '{print $2}')
+unset TMP

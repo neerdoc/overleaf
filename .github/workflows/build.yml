@@ -25,6 +25,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Read version
+        id: getversion
+        run: echo "version=$(cat version)" >> $GITHUB_OUTPUT
+
       # - name: Extract metadata (tags, labels) for Docker
       #   id: meta
       #   uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
@@ -37,4 +41,9 @@ jobs:
           context: .
           file: ./server-ce/Dockerfile-base.wulf
           push: true
-          tags: $(cat version)
+          tags: ${{ steps.getversion.outputs.version }}
+
+      - uses: ncipollo/release-action@v1
+        with:
+          # artifacts: "*.bz2"
+          tag: ${{ steps.getversion.outputs.version }}

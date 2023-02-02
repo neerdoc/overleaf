@@ -33,12 +33,16 @@ jobs:
         run: echo "version=$(cat version)" >> $GITHUB_OUTPUT
 
       - name: Read docker tag version of base image
-        id: basetag
+        id: basetagread
         run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base
 
       - name: Read docker tag version of final image
-        id: finaltag
+        id: finaltagread
         run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}
+
+      - name: Read docker tag version of base image
+        id: basetag
+        run: echo "version=$(modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base)" >> $GITHUB_OUTPUT
 
       - name: Test if
         id: testif

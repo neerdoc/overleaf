@@ -1,14 +1,13 @@
-name: Build and publish
+name: Check registry tag
 
-on: 
-  push:
-    branches: [ release ]
+on: push
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  check-tags:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,30 +31,25 @@ jobs:
       - name: Read version
         id: getversion
         run: echo "version=$(cat version)" >> $GITHUB_OUTPUT
-      
+
+      - name: Read docker tag version of base image
+        id: basetagread
+        run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base
+
+      - name: Read docker tag version of final image
+        id: finaltagread
+        run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}
+
       - name: Read docker tag version of base image
         id: basetag
         run: echo "version=$(modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base)" >> $GITHUB_OUTPUT
 
-      - name: Build and push Docker base image
+      - name: Test if false
+        id: testif
         if: ${{ (steps.basetag.outputs.version == 'TAG_NOT_FOUND') }}
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./server-ce/Dockerfile-base.wulf
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-base:${{ steps.getversion.outputs.version }}
+        run: echo "Exact value between :${{ steps.basetag.outputs.version }}:"
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./server-ce/Dockerfile
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.getversion.outputs.version }}
-          build-args: SHARELATEX_BASE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-base:${{ steps.getversion.outputs.version }}
-
-
-      - uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.getversion.outputs.version }}
+      - name: Test if true
+        id: testiftrue
+        if: ${{ (steps.basetag.outputs.version != 'TAG_NOT_FOUND') }}
+        run: echo "Exact value between :${{ steps.basetag.outputs.version }}:"

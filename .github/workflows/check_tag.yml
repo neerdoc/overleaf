@@ -27,7 +27,11 @@ jobs:
       - name: Install modules.
         id: modules
         run: ./update.sh
-    
+
+      - name: Read version
+        id: getversion
+        run: echo "version=$(cat version)" >> $GITHUB_OUTPUT
+
       - name: Read docker tag version of base image
         id: basetag
         run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base

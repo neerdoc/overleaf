@@ -46,5 +46,5 @@ jobs:
 
       - name: Test if
         id: testif
-        if: ${{ steps.basetag.outputs.version }} == "TAG_NOT_FOUND"
+        if: "${{ steps.basetag.outputs.version }}" == "TAG_NOT_FOUND"
         run: echo "Exact value between :${{ steps.basetag.outputs.version }}:"

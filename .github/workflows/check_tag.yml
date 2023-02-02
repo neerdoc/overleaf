@@ -1,5 +1,7 @@
 name: Check registry tag
 
+on: push
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}

@@ -25,15 +25,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install modules.
+        id: modules
+        run: ./update.sh
+
       - name: Read version
         id: getversion
         run: echo "version=$(cat version)" >> $GITHUB_OUTPUT
       
       - name: Read docker tag version of base image
         id: basetag
-        run:
-          - ./update.sh 
-          - echo "version=$(modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base)" >> $GITHUB_OUTPUT
+        run: echo "version=$(modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base)" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker base image
         if: ${{ steps.basetag.outputs.version }} == "TAG_NOT_FOUND"

@@ -29,18 +29,12 @@ jobs:
         id: getversion
         run: echo "version=$(cat version)" >> $GITHUB_OUTPUT
       
-      # - name: Extract metadata (tags, labels) for Docker
-      #   id: meta
-      #   uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-      #   with:
-      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
       - name: Read docker tag version of base image
         id: basetag
-        run: echo "version=$(docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-base:${{ steps.getversion.outputs.version }} | grep "Status:" | awk -F':' '{print $3}')" >> $GITHUB_OUTPUT
+        run: echo "version=$(modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base)" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker base image
-        if: ${{ steps.getversion.outputs.version }} != ${{ steps.basetag.outputs.version }}
+        if: ${{ steps.basetag.outputs.version }} == "TAG_NOT_FOUND"
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -60,5 +54,4 @@ jobs:
 
       - uses: ncipollo/release-action@v1
         with:
-          # artifacts: "*.bz2"
           tag: ${{ steps.getversion.outputs.version }}

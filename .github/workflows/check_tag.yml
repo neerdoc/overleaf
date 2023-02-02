@@ -1,0 +1,38 @@
+name: Check registry tag
+
+on: 
+  push:
+    branches: [ * ]
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  check-tags:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install modules.
+        id: modules
+        run: ./update.sh
+    
+      - name: Read docker tag version of base image
+        id: basetag
+        run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base
+
+      - name: Read docker tag version of final image
+        id: finaltag
+        run: modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}

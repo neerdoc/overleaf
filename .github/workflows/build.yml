@@ -54,5 +54,4 @@ jobs:
 
       - uses: ncipollo/release-action@v1
         with:
-          # artifacts: "*.bz2"
           tag: ${{ steps.getversion.outputs.version }}

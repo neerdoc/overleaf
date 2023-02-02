@@ -38,7 +38,7 @@ jobs:
         run: echo "version=$(modules/scripts/bin/docker_tags.sh --registry ${{ env.REGISTRY }} --tag ${{ steps.getversion.outputs.version }} ${{ env.IMAGE_NAME }}-base)" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker base image
-        if: ${{ steps.basetag.outputs.version }} == "TAG_NOT_FOUND"
+        if: ${{ (steps.basetag.outputs.version == 'TAG_NOT_FOUND') }}
         uses: docker/build-push-action@v4
         with:
           context: .

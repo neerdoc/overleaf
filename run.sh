@@ -19,8 +19,7 @@ printf "${MAGENTA}"
 message "Running container!"
 printf "${NC}"
 
-docker compose -f docker-compose.wulf.yml up -d
-
+docker compose -f docker-compose.wulf.yml up
 
 # Exit
 printf "${MAGENTA}"

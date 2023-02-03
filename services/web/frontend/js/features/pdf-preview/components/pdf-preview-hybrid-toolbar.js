@@ -6,6 +6,7 @@ import PdfCompileButton from './pdf-compile-button'
 import SwitchToEditorButton from './switch-to-editor-button'
 import PdfHybridLogsButton from './pdf-hybrid-logs-button'
 import PdfHybridDownloadButton from './pdf-hybrid-download-button'
+import PdfSignButton from '../../sign/components/pdf-sign-button'
 import PdfHybridCodeCheckButton from './pdf-hybrid-code-check-button'
 import PdfOrphanRefreshButton from './pdf-orphan-refresh-button'
 import { DetachedSynctexControl } from './detach-synctex-control'
@@ -60,6 +61,7 @@ function PdfPreviewHybridToolbarInner() {
         <PdfCompileButton />
         <PdfHybridLogsButton />
         <PdfHybridDownloadButton />
+        <PdfSignButton />
       </div>
       <div className="toolbar-pdf-right">
         <PdfHybridCodeCheckButton />

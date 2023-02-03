@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from 'react-bootstrap'
+import { useCallback } from 'react'
 import Tooltip from '../../../shared/components/tooltip'
 import Icon from '../../../shared/components/icon'
 import { useDetachCompileContext as useCompileContext } from '../../../shared/context/detach-compile-context'
@@ -12,10 +13,9 @@ function PdfSignButton() {
     ? t('sign_pdf')
     : t('please_compile_pdf_before_signing')
 
-
-  // const handleSignButtonClick = useCallback(() => {
-  //   startSigningWorkflow()
-  // }, [recompileButtonTextVariant, startCompile])
+  const handleSignButtonClick = useCallback(() => {
+    console.log("Clicked sign!");
+  })
 
   return (
     <Tooltip
@@ -24,12 +24,9 @@ function PdfSignButton() {
       overlayProps={{ placement: 'bottom' }}
     >
       <Button
-        bsStyle="link"
+        bsStyle="primary"
         disabled={!pdfUrl}
-        download
-        href={pdfUrl || '#'}
-        target="_blank"
-        style={{ pointerEvents: 'auto' }}
+        onClick={handleSignButtonClick}
       >
         <Icon type="pencil" fw />
       </Button>

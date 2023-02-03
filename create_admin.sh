@@ -21,13 +21,8 @@ printf "${NC}"
 
 regLink=$(docker exec sharelatex /bin/bash -c "cd /var/www/sharelatex; grunt user:create-admin --email=admin@domain.com" | grep http | sed 's#localhost#localhost:888#g')
 echo "${regLink}"
-token=$(echo "${regLink}" | awk -F'?' '{print $2}' | awk -F'&' '{print $1}' | awk -F'=' '{print $2}')
-echo "${token}"
-
-# curl -vvv ${regLink}
-curl -vvv --data 'password=very1Bad#' --data 'email=admin@domain.com' ${regLink} 
 
 # Exit
 printf "${MAGENTA}"
-message "All done! Login at http://localhost:888/login with username 'admin@domain.com' and password 'very1Bad#'"
+message "All done! Click the link above to set your password!"
 printf "${NC}"

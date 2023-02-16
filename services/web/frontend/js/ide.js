@@ -66,11 +66,11 @@ import './features/share-project-modal/controllers/react-share-project-modal-con
 import './features/source-editor/controllers/editor-switch-controller'
 import './features/source-editor/controllers/cm6-switch-away-survey-controller'
 import './features/source-editor/controllers/grammarly-warning-controller'
+import './features/outline/controllers/documentation-button-controller'
 import { cleanupServiceWorker } from './utils/service-worker-cleanup'
 import { reportCM6Perf } from './infrastructure/cm6-performance'
 import { reportAcePerf } from './ide/editor/ace-performance'
 import { scheduleUserContentDomainAccessCheck } from './features/user-content-domain-access-check'
-import isSplitTestEnabled from './utils/isSplitTestEnabled'
 
 App.controller(
   'IdeController',

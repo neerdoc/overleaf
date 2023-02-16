@@ -4,6 +4,7 @@ import Tooltip from '../../../shared/components/tooltip'
 import { sendMB } from '../../../infrastructure/event-tracking'
 import getMeta from '../../../utils/meta'
 import SplitTestBadge from '../../../shared/components/split-test-badge'
+import isValidTeXFile from '../../../main/is-valid-tex-file'
 
 function Badge() {
   const content = (
@@ -39,6 +40,7 @@ function Badge() {
 }
 
 const showLegacySourceEditor: boolean = getMeta('ol-showLegacySourceEditor')
+const hasNewSourceEditor: boolean = getMeta('ol-hasNewSourceEditor')
 
 function EditorSwitch() {
   const [newSourceEditor, setNewSourceEditor] = useScopeValue(
@@ -48,7 +50,9 @@ function EditorSwitch() {
 
   const [visual, setVisual] = useScopeValue('editor.showVisual')
 
-  const richTextOrVisual = richText || visual
+  const [docName] = useScopeValue('editor.open_doc_name')
+  const richTextAvailable = isValidTeXFile(docName)
+  const richTextOrVisual = richText || (richTextAvailable && visual)
 
   const handleChange = useCallback(
     event => {
@@ -92,18 +96,22 @@ function EditorSwitch() {
       <fieldset className="toggle-switch">
         <legend className="sr-only">Editor mode.</legend>
 
-        <input
-          type="radio"
-          name="editor"
-          value="cm6"
-          id="editor-switch-cm6"
-          className="toggle-switch-input"
-          checked={!richTextOrVisual && !!newSourceEditor}
-          onChange={handleChange}
-        />
-        <label htmlFor="editor-switch-cm6" className="toggle-switch-label">
-          <span>Source</span>
-        </label>
+        {hasNewSourceEditor && (
+          <>
+            <input
+              type="radio"
+              name="editor"
+              value="cm6"
+              id="editor-switch-cm6"
+              className="toggle-switch-input"
+              checked={!richTextOrVisual && !!newSourceEditor}
+              onChange={handleChange}
+            />
+            <label htmlFor="editor-switch-cm6" className="toggle-switch-label">
+              <span>Source</span>
+            </label>
+          </>
+        )}
 
         {showLegacySourceEditor ? (
           <>
@@ -117,7 +125,7 @@ function EditorSwitch() {
               onChange={handleChange}
             />
             <label htmlFor="editor-switch-ace" className="toggle-switch-label">
-              <span>Source (legacy)</span>
+              <span>{hasNewSourceEditor ? 'Source (legacy)' : 'Source'}</span>
             </label>
           </>
         ) : null}
@@ -130,6 +138,7 @@ function EditorSwitch() {
           className="toggle-switch-input"
           checked={!!richTextOrVisual}
           onChange={handleChange}
+          disabled={!richTextAvailable}
         />
         <label
           htmlFor="editor-switch-rich-text"

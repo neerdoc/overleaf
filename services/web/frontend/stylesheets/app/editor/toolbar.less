@@ -282,6 +282,11 @@
   pointer-events: none;
 }
 
+.toggle-switch-input:disabled + .toggle-switch-label {
+  color: @gray-lighter;
+  cursor: not-allowed;
+}
+
 .toggle-switch-input:checked + .toggle-switch-label {
   span {
     background-position: -100% 0;
@@ -331,22 +336,6 @@
 
 .formatting-buttons-wrapper {
   display: flex;
-}
-
-.formatting-buttons-portal {
-  display: flex;
-  .formatting-btn--icon:last-of-type {
-    border-right: none;
-  }
-}
-
-.formatting-buttons-cm6-panel {
-  background-color: @formatting-btn-bg;
-  display: flex;
-
-  & .formatting-btn {
-    padding: 2px 0;
-  }
 }
 
 .formatting-btn {

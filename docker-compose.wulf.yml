@@ -26,6 +26,8 @@ services:
         environment:
             # Zoho Sign API TOKEN
             ZOHO_REFRESH_TOKEN: 'dummy_token.please_replace_with_valid_token'
+            ZOHO_CLIENT_ID: 'dummy_id.please_replace_with_valid_id'
+            ZOHO_CLIENT_SECRET: 'dummy_secret.please_replace_with_valid_secret'
 
             SHARELATEX_APP_NAME: Overleaf Community Edition
 

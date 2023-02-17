@@ -24,6 +24,8 @@ services:
             ########################################################################
             # - /var/run/docker.sock:/var/run/docker.sock
         environment:
+            # Zoho Sign API TOKEN
+            ZOHO_REFRESH_TOKEN: 'dummy_token.please_replace_with_valid_token'
 
             SHARELATEX_APP_NAME: Overleaf Community Edition
 

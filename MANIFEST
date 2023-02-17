@@ -12,6 +12,7 @@ export version=$(cat version)
 
 # Define the dockerfile, image name and tag (in order!)
 declare -a BUILDS # Naming convention: <Dockerfile>#<Image>:<Tag>#build_args.
+BUILDS+=( "server-ce/Dockerfile-base.wulf#ghcr.io/neerdoc/overleaf-base:${version}#--build-arg SHARELATEX_BASE_TAG=ghcr.io/neerdoc/overleaf-base:${version}" )
 BUILDS+=( "server-ce/Dockerfile#ghcr.io/neerdoc/overleaf:${version}#--build-arg SHARELATEX_BASE_TAG=ghcr.io/neerdoc/overleaf-base:${version}" )
 
 # We still need to define what image to run! Which we will assume is the last

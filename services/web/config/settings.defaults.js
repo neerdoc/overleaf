@@ -806,6 +806,14 @@ module.exports = {
     exclude: ['app/views/project/editor', 'app/views/project/list'],
   },
 
+  // /Zoho settings
+  // -----------
+  zoho: {
+    RefreshToken: process.env.ZOHO_REFRESH_TOKEN,
+    ClientID: process.env.ZOHO_CLIENT_ID,
+    ClientSecret: process.env.ZOHO_CLIENT_SECRET,
+  },
+
   unsupportedBrowsers: {
     ie: '<=11',
   },

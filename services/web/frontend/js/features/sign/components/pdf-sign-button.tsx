@@ -5,11 +5,13 @@ import Tooltip from '../../../shared/components/tooltip'
 import Icon from '../../../shared/components/icon'
 import { useDetachCompileContext as useCompileContext } from '../../../shared/context/detach-compile-context'
 import { useState, useEffect } from 'react';
+// import zoho '../../../../../config/settings.defaults.js')
+const settings = require('@overleaf/settings')
 
 // Get the refresh token from the environment.
-const ZohoRefreshToken = process.env.ZOHO_REFRESH_TOKEN
-const ZohoClientID = process.env.ZOHO_CLIENT_ID
-const ZohoClientSecret = process.env.ZOHO_CLIENT_SECRET
+// const ZohoRefreshToken = process.env.ZOHO_REFRESH_TOKEN
+// const ZohoClientID = process.env.ZOHO_CLIENT_ID
+// const ZohoClientSecret = process.env.ZOHO_CLIENT_SECRET
 const [ZohoAccessToken, setZohoAccessToken ] = useState('');
 
 function PdfSignButton() {
@@ -23,7 +25,7 @@ function PdfSignButton() {
   const handleSignButtonClick = useCallback(async () => {
     // Debugging first.
     console.log("Clicked sign!");
-    console.log("Refresh token is " + ZohoRefreshToken)
+    console.log("Refresh token is " + settings.zoho.RefreshToken)
     // Get the access token.
     await getAccessToken();
     console.log("Access token is " + ZohoAccessToken)
@@ -52,9 +54,9 @@ async function getAccessToken() {
     method: 'POST',
     body: JSON.stringify({
       grant_type: refresh_token,
-      refresh_token: ZohoRefreshToken,
-      client_id: ZohoClientID,
-      client_secret: ZohoClientSecret,
+      refresh_token: settings.zoho.RefreshToken,
+      client_id: settings.zoho.ClientID,
+      client_secret: settings.zoho.ClientSecret,
     }),
     headers: {
       'Content-type': 'application/json; charset=UTF-8',

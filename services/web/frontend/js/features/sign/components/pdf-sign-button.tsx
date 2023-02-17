@@ -5,6 +5,8 @@ import Tooltip from '../../../shared/components/tooltip'
 import Icon from '../../../shared/components/icon'
 import { useDetachCompileContext as useCompileContext } from '../../../shared/context/detach-compile-context'
 
+const ZohoRefreshToken = process.env.ZOHO_REFRESH_TOKEN
+
 function PdfSignButton() {
   const { pdfUrl } = useCompileContext()
 
@@ -15,6 +17,7 @@ function PdfSignButton() {
 
   const handleSignButtonClick = useCallback(() => {
     console.log("Clicked sign!");
+    console.log("Token is " + ZohoRefreshToken)
   })
 
   return (
